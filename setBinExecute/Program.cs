@@ -1,4 +1,11 @@
-﻿namespace setBinExecute;
+﻿/*
+Программа просматривает каталог и снимает там для определённой группы права на доступ,
+но только на те файлы, которые являются исполняемыми
+Служит для того, чтобы снять для пользователя возможность исполнения тех программ, которые ему не нужны
+*/
+
+
+namespace setBinExecute;
 
 using System.Diagnostics;
 using System.IO;
@@ -11,15 +18,35 @@ class Program
         if (args.Length != 3)
         {
             Console.WriteLine("setBinExecute /usr/bin g:noaccess_sbin file.whitelist");
-            Console.WriteLine("setBinExecute /usr/bin g:noaccess_sbin X");
+            // Console.WriteLine("setBinExecute /usr/bin g:noaccess_sbin X");
             return;
         }
 
         var dir   = new DirectoryInfo(args[0]);
         var user  = args[1];
+        var files = File.ReadAllLines(args[2].Trim());
+
+        foreach (var fileName in files)
+        {
+            var fnt = fileName.Trim();
+            if (fnt.StartsWith("#") || fnt.Length <= 0)
+                continue;
+
+            var fnr = getRealpath(fileName);
+            if (whiteFiles.ContainsKey(fnr))
+            {
+                Console.WriteLine("# Найден повторяющийся файл в списке:\n# " + fileName + "\n# " + fnr + "\n\n");
+                continue;
+            }
+
+            whiteFiles.Add(fnr, null);
+        }
+
 
         viewedDirs.Add(dir.FullName, null);
-        Console.WriteLine($"work for directory '{dir.FullName}'");
+        Console.WriteLine($"# work for directory '{dir.FullName}'");
+        Console.WriteLine($"# work with user '{user}'");
+        Console.WriteLine($"# work with whitelist '{args[2].Trim()}'");
 
         setRights(user, dir);
 
@@ -69,6 +96,7 @@ class Program
     }
 
     static SortedList<string, string?> viewedDirs = new SortedList<string, string?>(64*1024);
+    static SortedList<string, string?> whiteFiles = new SortedList<string, string?>(64*1024);
 
     static int count = 0;
     static void setRights(string user, DirectoryInfo dir)
@@ -107,7 +135,15 @@ class Program
                 Console.WriteLine(flr); */
 
             if (isEx)
+            {
+                if (whiteFiles.ContainsKey(flr))
+                {
+                    Console.WriteLine($"sudo setfacl -x {user} \"{flr}\"");
+                    continue;
+                }
+
                 Console.WriteLine($"sudo setfacl -m {user}:- \"{flr}\"");
+            }
         }
     }
 
