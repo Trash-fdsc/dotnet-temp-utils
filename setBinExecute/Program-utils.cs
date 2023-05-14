@@ -55,6 +55,7 @@ partial class Program
             var psi = new ProcessStartInfo("realpath", $"\"{path}\"");
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = true;
+            psi.RedirectStandardError  = true;
             using var pi  = Process.Start(psi);
 
             if (pi == null)
@@ -63,8 +64,18 @@ partial class Program
             pi.WaitForExit();
 
             var rpath = pi.StandardOutput.ReadToEnd(); // Console.WriteLine(rpath);
-                rpath = rpath[0 .. ^1];
-            return rpath;
+
+            // Видимо, файл не существует
+            if (pi.ExitCode != 0 || rpath.Length <= 0)
+            {
+                // Console.Error.WriteLine($"getRealpath: file not found '{path}'; '{rpath}'");
+                // Console.Error.WriteLine(pi.StandardError.ReadToEnd());
+                // throw new Exception("getRealpath: file not found");
+                return "";
+            }
+
+            rpath = rpath[0 .. ^1];
+            return  rpath;
         }
         catch (Exception ex)
         {
@@ -81,13 +92,10 @@ partial class Program
         }
     }
 
-    static public bool isExecutable(DirectoryInfo? dir, string? path = null)
+    static public bool isExecutable(string? path = null)
     {
         try
         {
-            path ??= dir?.FullName + "/."; //dir?.FullName ?? throw new ArgumentNullException();
-            if (dir == null) throw new ArgumentNullException();
-
             var psi = new ProcessStartInfo("ls", "-al \"" + path + "\"");
             psi.UseShellExecute = false;
             psi.RedirectStandardOutput = true;

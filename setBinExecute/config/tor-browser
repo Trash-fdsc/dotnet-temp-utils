@@ -1,0 +1,28 @@
+# sudo setfacl -x g:noaccess_sbin
+
+#/bin/cut
+#/bin/grep
+#bin/xdg-settings
+
+# Прикладные программы, которые оставлены для запуска
+/usr/bin/ping
+/home/main/users/tor-browser/bin/tor-browser_ru
+
+
+
+# Это запускается при старте TorBrowser
+/usr/bin/env
+/home/main/users/tor-browser/bin/tor-browser_ru/start-tor-browser.desktop
+/usr/bin/sed
+/usr/bin/tail
+/usr/bin/file
+/usr/bin/expr
+/usr/bin/zenity
+/usr/bin/getconf
+/usr/bin/cp
+/usr/bin/ln
+/usr/bin/mkdir
+/usr/bin/basename
+/usr/bin/dirname
+/usr/bin/realpath
+/usr/bin/id

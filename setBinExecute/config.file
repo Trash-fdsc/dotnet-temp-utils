@@ -1,6 +1,7 @@
 dirs:/usr/
-dirs:/bin/
-dirs:/sbin
+# dirs:/bin/
+# dirs:/sbin
+# dirs:/lib
 dirs:/opt
 
 users:g:noaccess_sbin
@@ -9,15 +10,20 @@ whitelists:config/main
 whitelists:config/noaccess_sbin
 
 NEW::
-users:noaccess_sbin_deluge
+users:g:noaccess_sbin_deluge
 
 whitelists:config/main
 whitelists:config/deluge
 
 
 NEW::
-users:noaccess_sbin_mega
+users:g:noaccess_sbin_mega
 
 whitelists:config/main
 whitelists:config/mega
 
+NEW::
+users:u:tor-browser
+
+whitelists:config/main
+whitelists:config/tor-browser

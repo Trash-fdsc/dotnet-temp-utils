@@ -13,58 +13,220 @@ namespace setBinExecute;
 
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 partial class Program
 {
     static SortedList<string, string?> viewedDirs = new SortedList<string, string?>(64*1024);
-    static SortedList<string, string?> whiteFiles = new SortedList<string, string?>(64*1024);
+    static SortedList<string, string?> commandsx  = new SortedList<string, string?>(64*1024);
+    static SortedList<string, string?> commandsm  = new SortedList<string, string?>(64*1024);
+    static SortedList<string, string?> dirToView  = new SortedList<string, string?>(64);
 
-    static int count = 0;
-    static void setRights(string user, DirectoryInfo dir)
+
+    public readonly static object consoleSync = new Object();
+    public readonly static object taskSync    = new Object();
+    static void setRights()
+    {
+        foreach (var conf in configurations)
+        {
+            foreach (var dir in conf.vals["dirs"])
+            {
+                if (dirToView.ContainsKey(dir))
+                    continue;
+
+                dirToView.Add(dir, null);
+            }
+        }
+
+        var dirs  = dirToView.Keys;
+
+        // Проходим снизу вверх, чтобы сначала входить в поддиректории
+        // Иначе мы помешаем через viewedDirs просматривать поддиректории,
+        // которые есть у одного пользователя, но которые уже были пройдены у другого пользователя,
+        // у которого эти директории являются поддиректориями просматриваемых директорий
+        // (для одного пользователя прошли весь /usr, а потом для другого пытаемся пройти /usr/bin, но viewedDirs уже содержит эту директорию)
+        /*for (int i = dirs.Count-1; i >= 0; i--)
+            setRights(new DirectoryInfo(dirs[i]), new SortedList<string, Configuration>(0));*/
+        Parallel.ForEach
+        (
+            dirs,
+            (di, state, index) =>
+            {
+                setRights(new DirectoryInfo(di), new SortedList<string, Configuration>(0));
+            }
+        );
+
+        while (count > 0)
+        {
+            lock (taskSync)
+                Monitor.Wait(taskSync);
+        }
+    }
+
+    static volatile int count = 0;
+    static          int procc = Environment.ProcessorCount;
+    // static DirectoryInfo[] nullDI = new DirectoryInfo[0];
+    static void setRights(DirectoryInfo dir, SortedList<string, Configuration> parentUsers)
     {
          dir.Refresh();
-        //Console.SetCursorPosition(0, Console.CursorTop);
-        //Console.Write(count);
-        count++;
+         if (!dir.Exists)
+            return;
 
-        var dirs  = dir.GetDirectories("", SearchOption.TopDirectoryOnly);
-        var files = dir.GetFiles      ("", SearchOption.TopDirectoryOnly);
+        var users = new SortedList<string, Configuration>(parentUsers);
+
+        DirectoryInfo[] dirs;
+        Parallel.ForEach
+        (
+            configurations,
+            delegate (Configuration conf)
+            {
+                conf.getUsersForDir(dir, users);
+            }
+        );
+        /*
+        foreach (var conf in configurations)
+            conf.getUsersForDir(dir, users);
+*/
+        var sb = new StringBuilder(':');
+        sb.AppendJoin(':', users.Keys);
+        var usersStr = sb.ToString();
+        sb.Append(':');
+        sb.Clear();
+
+        var drp = getRealpath(dir.FullName);
+
+        lock (viewedDirs)
+        {
+            if (viewedDirs.ContainsKey(drp))
+            {
+                if (viewedDirs[drp]!.Contains(usersStr))
+                    return;
+
+                // viewedDirs.Remove(drp);
+                // Console.Error.WriteLine("!!!!!!!!!!!!!!!!!!!!! viewedDirs.Remove(drp) !!!!!!!!!!!!!!!!!!!!!");
+                viewedDirs[drp] = viewedDirs[drp] + usersStr;
+            }
+            else
+                viewedDirs.Add(drp, usersStr);
+        }
+
+        dirs = dir.GetDirectories("", SearchOption.TopDirectoryOnly);
+
 
         foreach (var dr in dirs)
-        {   // Console.WriteLine(dr);
-            var isi = false;//isImmutable(dr);
-            if (isi)
+        {
+            Interlocked.Increment(ref count);
+            if (count > procc)
             {
-                // Не будем трогать неизменяемые директории
-                //ProcessStart("chattr",   $"-i \"{dr.FullName}\"");
+                ProcessSubDirectoryWithCounter(users, dr);
             }
-
-            var drr = getRealpath(dr.FullName);
-            if (viewedDirs.ContainsKey(drr))
-                continue;
-
-            viewedDirs.Add(drr, null);
-            setRights(user, new DirectoryInfo(drr));
+            else
+                ThreadPool.QueueUserWorkItem
+                (
+                    delegate
+                    {
+                        ProcessSubDirectoryWithCounter(users, dr);
+                    }
+                );
         }
 
-        foreach (var fl in files)
-        {
-            var flr  = getRealpath(fl.FullName);
-            var isEx = isExecutable(fl.Directory, flr);
-
-            /* if (flr != fl.FullName)
-                Console.WriteLine(flr); */
-
-            if (isEx)
+        var files = dir.GetFiles("", SearchOption.TopDirectoryOnly);
+        Parallel.ForEach
+        (
+        //foreach (var fl in files)
+            files,
+            (fl, state, index) =>
             {
-                if (whiteFiles.ContainsKey(flr))
+                // Иногда бывают ссылки на файлы, которых нет
+                var flr  = getRealpath (fl.FullName);
+                if (flr == "")
+                    return;
+
+                if (!File.Exists(flr))
+                    return;
+
+                var isEx = isExecutable(flr);
+
+                /* if (flr != fl.FullName)
+                    Console.WriteLine(flr); */
+
+                if (!isEx)
+                    return;
+
+                var xFacl = new StringBuilder();
+                var mFacl = new StringBuilder();
+                foreach (var user in users)
                 {
-                    Console.WriteLine($"sudo setfacl -x {user} \"{flr}\"");
-                    continue;
+                    if (user.Value.whites.ContainsKey(flr))
+                    {
+                        if (xFacl.Length > 0)
+                            xFacl.Append(",");
+
+                        xFacl.Append(user.Key);
+                    }
+                    else
+                    {
+                        if (mFacl.Length > 0)
+                            mFacl.Append(",");
+
+                        mFacl.Append(user.Key + ":-");
+                    }
                 }
 
-                Console.WriteLine($"sudo setfacl -m {user}:- \"{flr}\"");
+                lock (commandsx)
+                if (xFacl.Length > 0)
+                {
+                    var xf = xFacl.ToString();
+                        xf = $"setfacl -x {xf} \"{flr}\"";
+                    if (!commandsx.ContainsKey(xf))
+                    {
+                        lock (consoleSync)
+                            Console.WriteLine(xf);
+
+                        commandsx.Add(xf, null);
+                    }
+                }
+
+                lock (commandsm)
+                if (mFacl.Length > 0)
+                {
+                    var mf = mFacl.ToString();
+                        mf = $"setfacl -m {mf} \"{flr}\"";
+                    if (!commandsm.ContainsKey(mf))
+                    {
+                        lock (consoleSync)
+                            Console.WriteLine(mf);
+
+                        commandsm.Add(mf, null);
+                    }
+                }
             }
+        );
+    }
+
+    private static void ProcessSubDirectoryWithCounter(SortedList<string, Configuration> users, DirectoryInfo dr)
+    {
+        try
+        {
+            ProcessSubDirectory(users, dr);
         }
+        finally
+        {
+            Interlocked.Decrement(ref count);
+            lock (taskSync)
+                Monitor.PulseAll(taskSync);
+        }
+    }
+
+    private static void ProcessSubDirectory(SortedList<string, Configuration> users, DirectoryInfo dr)
+    {
+        var drr = getRealpath(dr.FullName);
+
+        lock (viewedDirs)
+            if (viewedDirs.ContainsKey(drr))
+                return;
+
+        var di = new DirectoryInfo(drr);
+        setRights(di, users);
     }
 }

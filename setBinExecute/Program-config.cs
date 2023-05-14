@@ -20,7 +20,7 @@ partial class Program
         if (!ParseConfig(args))
             return;
 
-        // setRights();
+        setRights();
 
         Console.WriteLine();
     }
@@ -40,6 +40,7 @@ partial class Program
         var _config_lines = File.ReadAllLines(config_fi.FullName);
         var  config_lines = new List<string>(_config_lines);
         // Сюда вносим новую группу, чтобы при её добавлении как последней групы в предыдущую группу точно скопировались директории из ещё более предыдущей
+        // Эта группа реально не добавляется никуда, т.к. после не нет ни одной строки
         config_lines.Add("NEW::");
 
 
@@ -88,7 +89,6 @@ partial class Program
                 return false;
         }
 
-        configurations.RemoveAt(configurations.Count-1);
         var success = true;
         Parallel.ForEach
         (
