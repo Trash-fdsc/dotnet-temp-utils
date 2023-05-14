@@ -1,10 +1,5 @@
 # sudo setfacl -x g:noaccess_sbin
 
-/bin/bash
-# /usr/bin/dash
-/bin/sh
-
-
 /bin/cut
 /bin/grep
 # Это запускается при вызове opera
@@ -38,12 +33,3 @@
 # Запускается при старте quite-rss
 /bin/quiterss
 
-
-
-# Это используется, когда входишь под пользователя: до старта любых программ
-/usr/bin/groups
-
-# Это используется при старте браузеров, чтобы снизить их приоритет
-/usr/bin/nice
-/usr/bin/ionice
-/usr/bin/sleep

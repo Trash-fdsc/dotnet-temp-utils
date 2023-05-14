@@ -1,0 +1,14 @@
+# Это часто нужно для работы приложения и его вызова
+/bin/bash
+/usr/bin/dash
+/bin/sh
+
+/usr/bin/groups
+
+
+
+# Это используется в скриптах запуска
+/usr/bin/nice
+/usr/bin/ionice
+/usr/bin/pidof
+/usr/bin/sleep

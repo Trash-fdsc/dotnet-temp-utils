@@ -1,17 +1,5 @@
 # sudo setfacl -x g:noaccess_sbin_deluge
 
-/bin/bash
-# /usr/bin/dash
-/bin/sh
-
-/usr/bin/groups
-
-# Это используется в скрипте запуска
-/usr/bin/nice
-/usr/bin/ionice
-/usr/bin/pidof
-/usr/bin/sleep
-
 
 # Прикладные программы, которые оставлены для запуска
 /usr/bin/deluge
