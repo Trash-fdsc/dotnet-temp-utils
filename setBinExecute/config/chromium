@@ -1,0 +1,12 @@
+# sudo setfacl -x u:chromium 
+
+# Прикладные программы, которые оставлены для запуска
+/usr/bin/ping
+/usr/bin/chromium
+
+# Что используется
+/usr/lib/chromium/chromium
+/usr/lib/chromium/chrome_crashpad_handler
+/usr/bin/xdg-settings
+/bin/grep
+/bin/cut

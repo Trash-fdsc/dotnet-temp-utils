@@ -27,3 +27,12 @@ users:u:tor-browser
 
 whitelists:config/main
 whitelists:config/tor-browser
+
+NEW::
+users:u:chromium
+users:u:chromium-k
+
+whitelists:config/main
+whitelists:config/chromium
+
+

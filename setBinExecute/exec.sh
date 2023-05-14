@@ -3,6 +3,8 @@
 # Применение
 # sudo bash /Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/exec.sh > /tmp/ex.sh
 # sudo bash /tmp/ex.sh
+# sudo ausearch -k UsrBinXWatcher
+# sudo truncate -s 0 /var/log/audit/audit.log /var/log/audit/audit.log.1 /var/log/audit/audit.log.2 /var/log/audit/audit.log.3 /var/log/audit/audit.log.4
 
 gold=`pwd`
 # VisualStudioCode:w3geMDnvA18SaWNhn4e5@
