@@ -1,7 +1,7 @@
 # sudo setfacl -x g:noaccess_sbin
 
-#/bin/cut
-#/bin/grep
+/bin/cut
+/bin/grep
 #bin/xdg-settings
 
 # Прикладные программы, которые оставлены для запуска
