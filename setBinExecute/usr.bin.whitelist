@@ -1,7 +1,49 @@
+# sudo setfacl -x g:noaccess_sbin
+
 /bin/bash
-/bin/cut
 # /usr/bin/dash
 /bin/sh
-/usr/bin/opera
+
+
+/bin/cut
 /bin/grep
+# Это запускается при вызове opera
 /bin/xdg-settings
+
+# Прикладные программы, которые оставлены для запуска
+/usr/bin/opera
+/usr/bin/ping
+/home/main/users/tor-browser/bin/tor-browser_ru
+/home/main/users/quite-rss
+
+
+
+# Это запускается при старте TorBrowser
+/usr/bin/env
+/home/main/users/tor-browser/bin/tor-browser_ru/start-tor-browser.desktop
+/usr/bin/sed
+/usr/bin/tail
+/usr/bin/file
+/usr/bin/expr
+/usr/bin/zenity
+/usr/bin/getconf
+/usr/bin/cp
+/usr/bin/ln
+/usr/bin/mkdir
+/usr/bin/basename
+/usr/bin/dirname
+/usr/bin/realpath
+/usr/bin/id
+
+# Запускается при старте quite-rss
+/bin/quiterss
+
+
+
+# Это используется, когда входишь под пользователя: до старта любых программ
+/usr/bin/groups
+
+# Это используется при старте браузеров, чтобы снизить их приоритет
+/usr/bin/nice
+/usr/bin/ionice
+/usr/bin/sleep
