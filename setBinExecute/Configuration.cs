@@ -139,7 +139,7 @@ public class Configuration
         var dirs = this.vals["dirs"];
         foreach (var dir in dirs)
         {
-            var dr = dir + Path.PathSeparator;
+            var dr = dir + Path.DirectorySeparatorChar;
             if (dir == work)
                 goto found;
 

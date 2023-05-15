@@ -63,26 +63,39 @@ partial class Program
         }
     }
 
+
+    static void setRightsForFilList(List<FileInfo> fiList)
+    {
+        Parallel.ForEach
+        (
+            fiList,
+            (fi) =>
+            {
+                var dir   = fi.Directory;
+                if (dir == null)
+                    return;
+
+                var users = new SortedList<string, Configuration>(16);
+                getUsersForDir(dir, users);
+Console.Error.WriteLine($"users {users.Count} for file {fi.FullName}");
+                ProcessSingleFile(users, fi);
+            }
+        );
+    }
+
     static volatile int count = 0;
     static          int procc = Environment.ProcessorCount;
     // static DirectoryInfo[] nullDI = new DirectoryInfo[0];
     static void setRights(DirectoryInfo dir, SortedList<string, Configuration> parentUsers)
     {
-         dir.Refresh();
-         if (!dir.Exists)
+        dir.Refresh();
+        if (!dir.Exists)
             return;
 
         var users = new SortedList<string, Configuration>(parentUsers);
 
         DirectoryInfo[] dirs;
-        Parallel.ForEach
-        (
-            configurations,
-            delegate (Configuration conf)
-            {
-                conf.getUsersForDir(dir, users);
-            }
-        );
+        getUsersForDir(dir, users);
         /*
         foreach (var conf in configurations)
             conf.getUsersForDir(dir, users);
@@ -131,77 +144,98 @@ partial class Program
         }
 
         var files = dir.GetFiles("", SearchOption.TopDirectoryOnly);
+        ProcessFiles(users, files);
+    }
+
+    private static void getUsersForDir(DirectoryInfo dir, SortedList<string, Configuration> users)
+    {
         Parallel.ForEach
         (
-        //foreach (var fl in files)
+            configurations,
+            delegate (Configuration conf)
+            {
+                conf.getUsersForDir(dir, users);
+            }
+        );
+    }
+
+    private static void ProcessFiles(SortedList<string, Configuration> users, FileInfo[] files)
+    {
+        Parallel.ForEach
+        (
             files,
             (fl, state, index) =>
             {
-                // Иногда бывают ссылки на файлы, которых нет
-                var flr  = getRealpath (fl.FullName);
-                if (flr == "")
-                    return;
-
-                if (!File.Exists(flr))
-                    return;
-
-                var isEx = isExecutable(flr);
-
-                /* if (flr != fl.FullName)
-                    Console.WriteLine(flr); */
-
-                if (!isEx)
-                    return;
-
-                var xFacl = new StringBuilder();
-                var mFacl = new StringBuilder();
-                foreach (var user in users)
-                {
-                    if (user.Value.whites.ContainsKey(flr))
-                    {
-                        if (xFacl.Length > 0)
-                            xFacl.Append(",");
-
-                        xFacl.Append(user.Key);
-                    }
-                    else
-                    {
-                        if (mFacl.Length > 0)
-                            mFacl.Append(",");
-
-                        mFacl.Append(user.Key + ":-");
-                    }
-                }
-
-                lock (commandsx)
-                if (xFacl.Length > 0)
-                {
-                    var xf = xFacl.ToString();
-                        xf = $"setfacl -x {xf} \"{flr}\"";
-                    if (!commandsx.ContainsKey(xf))
-                    {
-                        lock (consoleSync)
-                            Console.WriteLine(xf);
-
-                        commandsx.Add(xf, null);
-                    }
-                }
-
-                lock (commandsm)
-                if (mFacl.Length > 0)
-                {
-                    var mf = mFacl.ToString();
-                        mf = $"setfacl -m {mf} \"{flr}\"";
-                    if (!commandsm.ContainsKey(mf))
-                    {
-                        lock (consoleSync)
-                            Console.WriteLine(mf);
-
-                        commandsm.Add(mf, null);
-                    }
-                }
+                ProcessSingleFile(users, fl);
             }
         );
+    }
+
+    private static void ProcessSingleFile(SortedList<string, Configuration> users, FileInfo fl)
+    {
+        // Иногда бывают ссылки на файлы, которых нет
+        var flr = getRealpath(fl.FullName);
+        if (flr == "")
+            return;
+
+        if (!File.Exists(flr))
+            return;
+
+        var isEx = isExecutable(flr);
+
+        /* if (flr != fl.FullName)
+            Console.WriteLine(flr); */
+
+        if (!isEx)
+            return;
+
+        var xFacl = new StringBuilder();
+        var mFacl = new StringBuilder();
+        foreach (var user in users)
+        {
+            if (user.Value.whites.ContainsKey(flr))
+            {
+                if (xFacl.Length > 0)
+                    xFacl.Append(",");
+
+                xFacl.Append(user.Key);
+            }
+            else
+            {
+                if (mFacl.Length > 0)
+                    mFacl.Append(",");
+
+                mFacl.Append(user.Key + ":-");
+            }
+        }
+
+        lock (commandsx)
+            if (xFacl.Length > 0)
+            {
+                var xf = xFacl.ToString();
+                xf = $"setfacl -x {xf} \"{flr}\"";
+                if (!commandsx.ContainsKey(xf))
+                {
+                    lock (consoleSync)
+                        Console.WriteLine(xf);
+
+                    commandsx.Add(xf, null);
+                }
+            }
+
+        lock (commandsm)
+            if (mFacl.Length > 0)
+            {
+                var mf = mFacl.ToString();
+                mf = $"setfacl -m {mf} \"{flr}\"";
+                if (!commandsm.ContainsKey(mf))
+                {
+                    lock (consoleSync)
+                        Console.WriteLine(mf);
+
+                    commandsm.Add(mf, null);
+                }
+            }
     }
 
     private static void ProcessSubDirectoryWithCounter(SortedList<string, Configuration> users, DirectoryInfo dr)

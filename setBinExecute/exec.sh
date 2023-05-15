@@ -7,22 +7,12 @@
 # sudo truncate -s 0 /var/log/audit/audit.log /var/log/audit/audit.log.1 /var/log/audit/audit.log.2 /var/log/audit/audit.log.3 /var/log/audit/audit.log.4
 
 gold=`pwd`
-# VisualStudioCode:w3geMDnvA18SaWNhn4e5@
-# set +m # disable job control in order to allow lastpipe
-# shopt -s lastpipe
 
 # cd /Arcs/Repos/smalls/dotnet-repos/setMegaR/
 # dotnet publish --output ./build -c Release --self-contained false --use-current-runtime true /p:PublishSingleFile=true -p:PublishReadyToRun=false
 
 mr=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/build
 
-# whitelist=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/usr.bin.whitelist
-# $mr/setBinExecute "/usr/bin" "g:noaccess_sbin" "$whitelist"
-
-# whitelist=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/usr.bin.deluge.whitelist
-# $mr/setBinExecute "/usr/bin" "g:noaccess_sbin_deluge" "$whitelist"
-
-# whitelist=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/usr.bin.mega.whitelist
 $mr/setBinExecute $mr/../config.file
 
 

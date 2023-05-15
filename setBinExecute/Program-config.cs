@@ -7,22 +7,35 @@ partial class Program
 {
     // Все сообщения пользователю пишутся в Console.Error
     // Рабочий вывод пишется в стандартный вывод
-    static void Main(string[] args)
+    static int Main(string[] args)
     {
         // var cd = Directory.GetCurrentDirectory();
-        if (args.Length != 1)
+        if (args.Length != 1 && args.Length != 2)
         {
             // Console.WriteLine("setBinExecute /usr/bin g:noaccess_sbin file.whitelist");
             Console.Error.WriteLine("setBinExecute config.file");
-            return;
+            Console.Error.WriteLine("setBinExecute config.file aide_report.log");
+            return 101;
         }
 
         if (!ParseConfig(args))
-            return;
+            return 201;
+
+        if (args.Length == 2)
+        {
+            var fs = ParseAideLog(args[1]);
+            if (fs == null)
+                return 202;
+
+            setRightsForFilList(fs);
+
+            return 0;
+        }
 
         setRights();
 
         Console.WriteLine();
+        return 0;
     }
 
     public static FileInfo? config_fi = null;
