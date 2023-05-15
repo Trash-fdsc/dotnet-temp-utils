@@ -77,7 +77,7 @@ partial class Program
 
                 var users = new SortedList<string, Configuration>(16);
                 getUsersForDir(dir, users);
-Console.Error.WriteLine($"users {users.Count} for file {fi.FullName}");
+
                 ProcessSingleFile(users, fi);
             }
         );
