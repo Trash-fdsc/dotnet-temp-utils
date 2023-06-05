@@ -6,10 +6,14 @@
 
 gold=`pwd`
 
-mr=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute/build
+mr=/Arcs/Repos/smalls/dotnet-temp-utils/setBinExecute
 
-$mr/setBinExecute $mr/../config.file /A/service/aide/report.log > /tmp/ex-aide.sh
+$mr/build/setBinExecute $mr/config.file.black $mr/config/first.black > /tmp/ex-aide-black.sh
+sudo bash /tmp/ex-aide-black.sh
+
+$mr/build/setBinExecute $mr/config.file /A/service/aide/report.log > /tmp/ex-aide.sh
 sudo bash /tmp/ex-aide.sh
+
 
 echo ----------------------------------------------------------------
 echo "Всего обновлено разрешений на файлах"

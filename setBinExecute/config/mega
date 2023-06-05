@@ -10,3 +10,4 @@
 /usr/bin/xfconf-query
 /usr/bin/xrdb
 
+/usr/bin/dbus-launch

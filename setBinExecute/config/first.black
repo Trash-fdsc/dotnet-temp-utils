@@ -1,0 +1,14 @@
+f: /usr/bin/ebook-convert
+f: /usr/bin/ebook-device
+f: /usr/bin/ebook-edit
+f: /usr/bin/ebook-meta
+f: /usr/bin/ebook-polish
+f: /usr/bin/ebook-viewer
+
+f: /usr/bin/xreader
+f: /usr/bin/xreader-previewer
+f: /usr/bin/xreader-thumbnailer
+
+f: /usr/bin/chromium
+f: /usr/bin/firefox
+f: /usr/bin/opera

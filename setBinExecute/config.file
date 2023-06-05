@@ -5,12 +5,15 @@ dirs:/usr/
 dirs:/opt
 
 users:g:noaccess_sbin
+users:u:opera
+users:u:quite-rss
 
 whitelists:config/main
 whitelists:config/noaccess_sbin
 
 NEW::
 users:g:noaccess_sbin_deluge
+users:u:deluge
 
 whitelists:config/main
 whitelists:config/deluge
@@ -18,6 +21,7 @@ whitelists:config/deluge
 
 NEW::
 users:g:noaccess_sbin_mega
+users:u:mega
 
 whitelists:config/main
 whitelists:config/mega
@@ -34,5 +38,4 @@ users:u:chromium-k
 
 whitelists:config/main
 whitelists:config/chromium
-
-
+whitelists:config/firefox

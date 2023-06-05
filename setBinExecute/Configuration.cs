@@ -133,6 +133,7 @@ public class Configuration
         return false;
     }
 
+    readonly static string doubleSlash = "" + Path.DirectorySeparatorChar + Path.DirectorySeparatorChar;
     public bool getUsersForDir(DirectoryInfo di, SortedList<string, Configuration> users)
     {
         var work = di.FullName;
@@ -140,6 +141,9 @@ public class Configuration
         foreach (var dir in dirs)
         {
             var dr = dir + Path.DirectorySeparatorChar;
+            while (dr.EndsWith(doubleSlash))        // Все директории заканчиваются не на слеш, кроме корня
+                dr = dr[..^1];
+
             if (dir == work)
                 goto found;
 

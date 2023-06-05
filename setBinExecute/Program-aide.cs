@@ -44,6 +44,7 @@ partial class Program
 
                 lock (fs)
                 {
+                    // Console.WriteLine("File added: " + fi.FullName);
                     fs.Add(fi);
                 }
             }

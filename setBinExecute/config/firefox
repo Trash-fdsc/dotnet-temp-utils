@@ -1,0 +1,13 @@
+# sudo setfacl -x u:chromium 
+
+# Прикладные программы, которые оставлены для запуска
+# /usr/bin/ping
+/usr/bin/firefox
+
+# Что используется
+/usr/lib/firefox/firefox
+/usr/lib/firefox/firefox-bin
+
+#/usr/bin/xdg-settings
+#/bin/grep
+#/bin/cut

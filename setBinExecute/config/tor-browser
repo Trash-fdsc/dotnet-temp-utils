@@ -26,3 +26,5 @@
 /usr/bin/dirname
 /usr/bin/realpath
 /usr/bin/id
+
+/bin/update-mime-database

@@ -71,7 +71,7 @@ partial class Program
             fiList,
             (fi) =>
             {
-                var dir   = fi.Directory;
+                var dir  = fi.Directory;
                 if (dir == null)
                     return;
 

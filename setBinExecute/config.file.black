@@ -1,0 +1,10 @@
+# Конфигурация для чёрного списка. Должен работать только в паре с first.black чёрным списком
+dirs:/
+
+users:g:first
+users:u:a1
+users:u:ch
+# users:u:first
+
+whitelists:config/main
+
