@@ -5,10 +5,14 @@
 
 /usr/bin/groups
 
+# Нужно для смены пароля пользователя
+/usr/bin/passwd
+
 
 
 # Это используется в скриптах запуска
 /usr/bin/nice
+/usr/bin/renice
 /usr/bin/ionice
 /usr/bin/pidof
 /usr/bin/sleep
