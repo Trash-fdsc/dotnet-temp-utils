@@ -39,3 +39,17 @@ users:u:chromium-k
 whitelists:config/main
 whitelists:config/chromium
 whitelists:config/firefox
+
+
+NEW::
+users:u:dev
+
+whitelists:config/main
+whitelists:config/terminal
+whitelists:config/dotnet
+
+NEW::
+users:u:un
+
+# whitelists:config/sudo
+whitelists:config/un

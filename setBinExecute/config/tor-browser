@@ -6,9 +6,10 @@
 
 # Прикладные программы, которые оставлены для запуска
 /usr/bin/ping
-/home/main/users/tor-browser/bin/tor-browser_ru
+# /home/main/users/tor-browser/bin/tor-browser_ru
 
-
+/usr/bin/ls
+/usr/bin/which
 
 # Это запускается при старте TorBrowser
 /usr/bin/env
@@ -26,5 +27,8 @@
 /usr/bin/dirname
 /usr/bin/realpath
 /usr/bin/id
+/usr/bin/rm
+
+/usr/bin/locale-check
 
 /bin/update-mime-database

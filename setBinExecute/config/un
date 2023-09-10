@@ -1,0 +1,10 @@
+# Это, видимо, общие библиотеки загрузчиков и т.п.
+/lib64/ld-linux-x86-64.so.2
+
+/bin/bash
+/usr/bin/passwd
+/usr/bin/groups
+
+/usr/bin/sudo
+/usr/sbin/shutdown
+/usr/sbin/reboot

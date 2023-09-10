@@ -1,0 +1,13 @@
+# В этот файл можно внести файлы, разрешения которых необходимо обновить
+# Имя файла нужно передать как второй параметр к setBinExecute
+
+f: /usr/bin/cat
+f: /usr/bin/grep
+f: /usr/bin/fgrep
+f: /usr/bin/egrep
+f: /usr/bin/bash
+f: /usr/bin/passwd
+f: /usr/lib64/ld-linux-x86-64.so.2
+f: /usr/bin/groups
+f: /usr/bin/pwd
+f: /usr/bin/whoami

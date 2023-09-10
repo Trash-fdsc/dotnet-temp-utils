@@ -1,0 +1,12 @@
+# Разрешаем частые программы в терминале
+
+/usr/bin/cp
+# /usr/bin/cat
+
+# /usr/bin/grep
+# /usr/bin/fgrep
+# /usr/bin/egrep
+
+/usr/bin/ls
+
+
