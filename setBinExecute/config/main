@@ -3,7 +3,13 @@
 /usr/bin/dash
 /bin/sh
 
+/usr/bin/locale-check
+
+# Очистка консоли
+/usr/bin/clear
+
 /usr/bin/groups
+
 
 # Нужно для смены пароля пользователя
 /usr/bin/passwd
@@ -20,6 +26,7 @@
 /usr/bin/ionice
 /usr/bin/pidof
 /usr/bin/sleep
+
 
 
 # Это, видимо, общие библиотеки загрузчиков и т.п.
