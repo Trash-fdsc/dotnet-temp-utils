@@ -29,6 +29,6 @@
 /usr/bin/id
 /usr/bin/rm
 
-/usr/bin/locale-check
+# /usr/bin/locale-check
 
 /bin/update-mime-database

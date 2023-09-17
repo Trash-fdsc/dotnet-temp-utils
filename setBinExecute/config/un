@@ -6,5 +6,7 @@
 /usr/bin/groups
 
 /usr/bin/sudo
+/usr/bin/su
+
 /usr/sbin/shutdown
 /usr/sbin/reboot
