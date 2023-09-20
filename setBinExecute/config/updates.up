@@ -8,6 +8,8 @@ f: /usr/bin/egrep
 f: /usr/bin/bash
 f: /usr/bin/passwd
 f: /usr/lib64/ld-linux-x86-64.so.2
+f: /usr/lib/x86_64-linux-gnu/libc.so.6
 f: /usr/bin/groups
 f: /usr/bin/pwd
 f: /usr/bin/whoami
+f: /usr/bin/locale-check

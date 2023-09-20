@@ -1,3 +1,4 @@
 # Разрешаем вызывать dotnet
 
 /usr/bin/dotnet
+/usr/bin/rm

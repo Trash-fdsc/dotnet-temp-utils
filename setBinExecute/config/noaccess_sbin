@@ -1,9 +1,11 @@
 # sudo setfacl -x g:noaccess_sbin
 
 # /bin/cut
-# /bin/grep
+/bin/grep
+
 # Это запускается при вызове opera
 /bin/xdg-settings
+/usr/bin/xdg-settings
 
 # Прикладные программы, которые оставлены для запуска
 /usr/bin/opera
@@ -14,3 +16,4 @@
 # Запускается при старте quite-rss
 /bin/quiterss
 /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner
+
