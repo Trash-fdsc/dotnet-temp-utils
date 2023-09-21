@@ -2,3 +2,6 @@
 
 /usr/bin/dotnet
 /usr/bin/rm
+/usr/bin/sed
+/usr/bin/7z
+/usr/lib/p7zip/7z
