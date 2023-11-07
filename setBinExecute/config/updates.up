@@ -17,3 +17,4 @@ f: /usr/bin/rm
 f: /usr/bin/sed
 f: /usr/bin/7z
 f: /usr/lib/p7zip/7z
+f: /usr/bin/date

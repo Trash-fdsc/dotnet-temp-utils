@@ -5,7 +5,7 @@
 
 /usr/bin/locale-check
 
-# Очистка консоли
+# Очистка консоли и текущая дата и время
 /usr/bin/clear
 
 /usr/bin/groups
