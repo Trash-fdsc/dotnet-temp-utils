@@ -1,6 +1,6 @@
 # sudo setfacl -x g:noaccess_sbin
 
-# /bin/cut
+/bin/cut
 /bin/grep
 
 # Это запускается при вызове opera
@@ -11,6 +11,8 @@
 /usr/bin/opera
 /usr/bin/ping
 /home/main/users/quite-rss
+
+/usr/lib/x86_64-linux-gnu/opera/opera_autoupdate
 
 
 # Запускается при старте quite-rss
