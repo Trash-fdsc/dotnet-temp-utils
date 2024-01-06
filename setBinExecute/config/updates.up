@@ -2,6 +2,8 @@
 # Имя файла нужно передать как второй параметр к setBinExecute
 
 f: /usr/bin/cat
+f: /usr/bin/chmod
+f: /usr/bin/chown
 f: /usr/bin/grep
 f: /usr/bin/fgrep
 f: /usr/bin/egrep

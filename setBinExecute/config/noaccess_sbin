@@ -19,3 +19,5 @@
 /bin/quiterss
 /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner
 
+# chmod иногда нужен, чтобы при скачивании потом поменять разрешения
+/usr/bin/chmod
