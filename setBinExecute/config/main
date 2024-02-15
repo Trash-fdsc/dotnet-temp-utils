@@ -27,8 +27,6 @@
 /usr/bin/pidof
 /usr/bin/sleep
 
-
-
 # Это, видимо, общие библиотеки загрузчиков и т.п.
 /lib64/ld-linux-x86-64.so.2
 /usr/lib/x86_64-linux-gnu/libc.so.6

@@ -5,3 +5,6 @@
 /usr/bin/sed
 /usr/bin/7z
 /usr/lib/p7zip/7z
+
+# Иногда нужно создать папку. Обычно это не приводит к проблемам.
+/usr/bin/mkdir
