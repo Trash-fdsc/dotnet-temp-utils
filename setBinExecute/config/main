@@ -5,6 +5,9 @@
 
 /usr/bin/locale-check
 
+/usr/bin/basename
+/usr/bin/realpath
+
 
 # Очистка консоли и текущая дата и время
 /usr/bin/clear
@@ -19,6 +22,7 @@
 /usr/bin/pwd
 /usr/bin/whoami
 /usr/bin/echo
+
 
 
 # Это используется в скриптах запуска
