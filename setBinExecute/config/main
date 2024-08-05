@@ -3,10 +3,15 @@
 /usr/bin/dash
 /bin/sh
 
-/usr/bin/locale-check
 
 /usr/bin/basename
+/usr/bin/dirname
 /usr/bin/realpath
+
+
+/usr/bin/locale-check
+# Это, в принципе, можно спокойно забанить, т.к. может использоваться для идентификации наличествующих локалей с помощью команды locale -a
+/usr/bin/locale
 
 
 # Очистка консоли и текущая дата и время
