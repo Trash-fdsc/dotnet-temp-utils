@@ -23,9 +23,9 @@
 /usr/bin/cp
 /usr/bin/ln
 /usr/bin/mkdir
-/usr/bin/basename
-/usr/bin/dirname
-/usr/bin/realpath
+#/usr/bin/basename
+#/usr/bin/dirname
+#/usr/bin/realpath
 /usr/bin/id
 /usr/bin/rm
 

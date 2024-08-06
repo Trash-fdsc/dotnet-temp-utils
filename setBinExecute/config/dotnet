@@ -6,7 +6,7 @@
 /usr/bin/7z
 /usr/lib/p7zip/7z
 
-/usr/bin/realpath
+#/usr/bin/realpath
 /usr/bin/date
 
 /usr/lib/dotnet/packs/Microsoft.NETCore.App.Host.ubuntu.22.04-x64/7.0.16/runtimes/ubuntu.22.04-x64/native/apphost
