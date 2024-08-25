@@ -9,7 +9,7 @@ users:u:opera
 users:u:quite-rss
 
 whitelists:config/main
-whitelists:config/puseaudio
+whitelists:config/pulseaudio
 whitelists:config/noaccess_sbin
 
 
@@ -32,7 +32,7 @@ NEW::
 users:u:tor-browser
 
 whitelists:config/main
-whitelists:config/puseaudio
+whitelists:config/pulseaudio
 whitelists:config/tor-browser
 
 NEW::
