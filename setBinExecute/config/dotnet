@@ -5,6 +5,7 @@
 /usr/bin/sed
 /usr/bin/7z
 /usr/lib/p7zip/7z
+/usr/lib/7zip/7z
 
 #/usr/bin/realpath
 /usr/bin/date
