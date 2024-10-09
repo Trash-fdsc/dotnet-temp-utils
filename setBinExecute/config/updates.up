@@ -4,6 +4,7 @@
 f: /usr/bin/cat
 f: /usr/bin/chmod
 f: /usr/bin/chown
+f: /usr/bin/clear
 f: /usr/bin/grep
 f: /usr/bin/fgrep
 f: /usr/bin/egrep
