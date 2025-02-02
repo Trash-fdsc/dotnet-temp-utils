@@ -21,12 +21,12 @@ whitelists:config/main
 whitelists:config/deluge
 
 
-NEW::
-users:g:noaccess_sbin_mega
-users:u:mega
+#NEW::
+#users:g:noaccess_sbin_mega
+#users:u:mega
 
-whitelists:config/main
-whitelists:config/mega
+#whitelists:config/main
+#whitelists:config/mega
 
 NEW::
 users:u:tor-browser
