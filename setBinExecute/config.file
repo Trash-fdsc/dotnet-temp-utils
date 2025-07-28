@@ -35,13 +35,13 @@ whitelists:config/main
 # whitelists:config/pulseaudio
 whitelists:config/tor-browser
 
-NEW::
-users:u:chromium
-users:u:chromium-k
-users:u:ch-diet
+#NEW::
+#users:u:chromium
+#users:u:chromium-k
+#users:u:ch-diet
 
-whitelists:config/main
-whitelists:config/chromium
+#whitelists:config/main
+#whitelists:config/chromium
 # whitelists:config/firefox
 
 
