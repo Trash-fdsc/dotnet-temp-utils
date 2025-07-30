@@ -1,12 +1,19 @@
 # Разрешаем частые программы в терминале
 
 /usr/bin/cp
-# /usr/bin/cat
-
-# /usr/bin/grep
-# /usr/bin/fgrep
-# /usr/bin/egrep
 
 /usr/bin/ls
 
+# Это нужно для расширенного приглашения командной строки
+/usr/bin/cat
+/usr/bin/tput
 
+/usr/bin/grep
+/usr/bin/fgrep
+/usr/bin/egrep
+
+/usr/bin/df
+/usr/bin/tr
+/usr/bin/cut
+/usr/bin/uname
+/usr/bin/hostname
