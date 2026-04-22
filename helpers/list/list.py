@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# ln -s /A/_/Linux_Записки/Mint/Prg/helpers/list.py /usr/local/bin/list
+# ln -s /Arcs/Repos/smalls/dotnet-temp-utils/helpers/list/list.py /usr/local/bin/list
+# list -L 10 -fA | xargs -d '\n' -L 1 chattr +i
 # Справка: см. запрос о производстве скрипта list.py.query
 
 import os
@@ -117,16 +118,40 @@ def create_parser():
     type_group.add_argument(
         '-rln',
         action='store_true',
-        help='Рекурсивный обход символических ссылок. Защита от зацикливания обязательна.'
+        help='Рекурсивный обход символических ссылок.'
+    )
+    type_group.add_argument(
+        '-A',
+        action='store_true',
+        help='Выводить абсолютные пути.'
     )
 
     # Фильтры по имени и содержимому
     search_group = parser.add_argument_group('Фильтры поиска')
     search_group.add_argument(
-        '-name',
+        '-fname',
         metavar='"regex"',
         help='Имя файла соответствует регулярному выражению regex (кавычки обязательны).'
     )
+    search_group.add_argument(
+        '-!fname',
+        dest='not_fname',
+        metavar='"regex"',
+        help='Имя файла не соответствует регулярному выражению regex (кавычки обязательны).'
+    )
+    
+    search_group.add_argument(
+        '-dname',
+        metavar='"regex"',
+        help='Имя файла соответствует регулярному выражению regex (кавычки обязательны).'
+    )
+    search_group.add_argument(
+        '-!dname',
+        dest='not_dname',
+        metavar='"regex"',
+        help='Имя файла не соответствует регулярному выражению regex (кавычки обязательны).'
+    )
+    
     search_group.add_argument(
         '-content',
         metavar='"regex"',
@@ -388,12 +413,13 @@ def list_files_and_dirs(start_path, level, args, current_depth=0, base_path=None
 
     for entry in entries:
         entry_path = entry.path
-        rel_path = os.path.relpath(entry_path, base_path)
+        if args.A:
+            rel_path = entry_path
+        else:
+            rel_path = os.path.relpath(entry_path, base_path)
 
         # Применяем фильтры
         if not should_include_by_user_group(entry_path, args):
-            continue
-        if not matches_name_filter(entry.name, args.name):
             continue
 
         is_dir = entry.is_dir(follow_symlinks=False)
@@ -403,6 +429,7 @@ def list_files_and_dirs(start_path, level, args, current_depth=0, base_path=None
         is_link = entry.is_symlink()
 
         # Фильтрация по типу
+        need = True
         if args.d or args.f or args.ln:
             need = False
             if args.d and is_dir:
@@ -411,9 +438,6 @@ def list_files_and_dirs(start_path, level, args, current_depth=0, base_path=None
                 need = True
             elif args.ln and is_link:
                 need = True
-
-            if not need:
-                continue
 
         if args.date:
             start, end = args.date
@@ -437,6 +461,30 @@ def list_files_and_dirs(start_path, level, args, current_depth=0, base_path=None
 
         TL += dir_size
 
+        # Рекурсивный обход для сбора данных (но не вывод)
+        if (is_dir or (is_dirL and args.rln)) and current_depth < level:
+            list_files_and_dirs(
+                entry_path,
+                level,
+                args,
+                current_depth + 1,
+                base_path
+            )
+
+        if not need:
+            continue
+
+        if is_fileL:
+            if args.fname and not matches_name_filter(entry.name, args.fname):
+                continue
+            if args.not_fname and matches_name_filter(entry.name, args.not_fname):
+                continue
+        elif is_dirL:
+            if args.dname and not matches_name_filter(entry.name, args.dname):
+                continue
+            if args.not_dname and matches_name_filter(entry.name, args.not_dname):
+                continue
+            
         # Формируем строку вывода
         if is_dir or is_dirL:
             output_line = f"{rel_path}/"
@@ -461,15 +509,6 @@ def list_files_and_dirs(start_path, level, args, current_depth=0, base_path=None
         else:
             output_items.append((output_line, None, dir_size, is_dirL))
 
-        # Рекурсивный обход для сбора данных (но не вывод)
-        if (is_dir or (is_dirL and args.rln)) and current_depth < level:
-            list_files_and_dirs(
-                entry_path,
-                level,
-                args,
-                current_depth + 1,
-                base_path
-            )
 
     # Сортируем элементы в зависимости от args.s or args.size
     if args.s or args.size:
